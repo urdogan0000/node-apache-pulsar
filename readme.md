@@ -15,45 +15,47 @@ This project sets up an Apache Pulsar environment with producers and consumers u
 ```bash
 git clone <repository-url>
 cd <repository-directory>
-
-2. Install Dependencies
+```
+### 2. Install Dependencies
 
 Navigate to the project directory and install the necessary Node.js dependencies:
 
+```
 npm install
+```
 
 
-
-3. Set up Environment Variables
+### 3. Set up Environment Variables
 
 Create a .env file in the project root and add the following environment variables:
 
+```bash
 PULSAR_URL=pulsar://localhost:6650
 SAMPLE_TOPIC=persistent://public/default/my-topic
 CLIENT_SIZE=20
+```
 
-
-4. Start Pulsar using Docker Compose
+### 4. Start Pulsar using Docker Compose
 
 Ensure Docker is running, then start the Pulsar services with Docker Compose:
-
+```
 docker-compose up -d
-
+```
 This will start Zookeeper, Bookie, and Broker services for Apache Pulsar.
 
-5. Run the Producer
+### 5. Run the Producer
 
 The producer sends messages to the specified Pulsar topic.
-
+```
 node producer.js
-
-6. Run the Consumers
+```
+### 6. Run the Consumers
 
 The consumers will listen for messages on the specified Pulsar topic.
-
+```
 node index.js
-
-Project Structure
+```
+## Project Structure
 
     producer.js: Contains the code to send messages to the Pulsar topic.
     consumer.js: Contains the code to consume messages from the Pulsar topic.
@@ -62,7 +64,7 @@ Project Structure
     .env: Environment variables configuration file.
     docker-compose.yml: Docker Compose file to set up Pulsar services.
 
-Docker Compose Configuration
+## Docker Compose Configuration
 
 The docker-compose.yml file sets up the following services:
 
@@ -72,13 +74,13 @@ The docker-compose.yml file sets up the following services:
     broker: Broker service for Pulsar.
 
 
-Notes
+# Notes
 
     Ensure you have the latest version of Docker and Docker Compose installed.
     Modify the .env file as needed to match your setup.
     Adjust the docker-compose.yml configuration if you have different requirements.
 
-License
+# License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 

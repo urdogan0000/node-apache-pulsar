@@ -1,0 +1,14 @@
+{
+  "name": "lider-apache-pulsar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Haydar",
+  "license": "ISC",
+  "dependencies": {
+    "pulsar-client": "^1.11.1"
+  }
+}

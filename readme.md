@@ -85,5 +85,3 @@ The docker-compose.yml file sets up the following services:
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 
-This `README.md` file provides a comprehensive guide to setting up and running your project, including the prerequisites, setup steps, project structure, Docker Compose configuration, and notes for customization.
-

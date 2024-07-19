@@ -13,8 +13,8 @@ This project sets up an Apache Pulsar environment with producers and consumers u
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/urdogan0000/node-apache-pulsar.git
+cd node-apache-pulsar
 ```
 ### 2. Install Dependencies
 

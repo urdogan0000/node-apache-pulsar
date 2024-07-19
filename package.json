@@ -9,6 +9,8 @@
   "author": "Haydar",
   "license": "ISC",
   "dependencies": {
-    "pulsar-client": "^1.11.1"
+    "dotenv": "^16.4.5",
+    "pulsar-client": "^1.11.1",
+    "zstd-codec": "^0.1.4"
   }
 }

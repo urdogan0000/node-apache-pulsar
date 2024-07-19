@@ -1,4 +1,5 @@
 const createConsumer = require('./consumer'); // Assuming the consumer function is in 'consumer.js'
+require('dotenv').config();
 
 async function startConsumers(numConsumers) {
   const consumerPromises = [];
@@ -10,4 +11,4 @@ async function startConsumers(numConsumers) {
 }
 
 // Start 200 consumers
-startConsumers(5000).catch(console.error);
+startConsumers(process.env.CLIENT_SIZE).catch(console.error);

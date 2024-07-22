@@ -3,12 +3,28 @@ require('dotenv').config();
 
 async function startConsumers(numConsumers) {
   const consumerPromises = [];
-  for (let i = 1; i <= numConsumers; i++) {
+  
+  const consumerCount = parseInt(numConsumers, 10);
+  
+  if (isNaN(consumerCount) || consumerCount <= 0) {
+    console.error('Invalid CLIENT_SIZE. It must be a positive number.');
+    return;
+  }
+
+  for (let i = 1; i <= consumerCount; i++) {
     const subscriptionName = `sub${i}`;
     consumerPromises.push(createConsumer(subscriptionName));
   }
-  await Promise.all(consumerPromises);
+  
+  try {
+    await Promise.all(consumerPromises);
+    console.log(`Successfully started ${consumerCount} consumers.`);
+  } catch (error) {
+    console.error('Error starting consumers:', error);
+  }
 }
 
-// Start 200 consumers
-startConsumers(process.env.CLIENT_SIZE).catch(console.error);
+// Start consumers based on the CLIENT_SIZE environment variable
+startConsumers(process.env.CLIENT_SIZE).catch(error => {
+  console.error('Unhandled error:', error);
+});

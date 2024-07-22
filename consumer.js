@@ -1,59 +1,67 @@
 const Pulsar = require('pulsar-client');
 require('dotenv').config();
+const { getProducer, closeProducers, closeClient } = require('./producer');
 
-async function createConsumer(subscriptionName) {
-  const client = new Pulsar.Client({
-    serviceUrl: process.env.PULSAR_URL
-  });
+// Singleton Pulsar client instance
+const pulsarClient = new Pulsar.Client({
+  serviceUrl: process.env.PULSAR_URL
+});
 
+// Utility function to get a consumer
+async function getConsumer(subscriptionName) {
   try {
-    const consumer = await client.subscribe({
+    return await pulsarClient.subscribe({
       topic: process.env.SAMPLE_TOPIC,
       subscription: subscriptionName,
-      subscriptionType: 'Shared',
-      subscriptionInitialPosition:'Latest'
+      subscriptionType: process.env.CONSUMER_SC_TYPE,
+      subscriptionInitialPosition: 'Latest'
     });
-
-    console.log(`Consumer with subscription ${subscriptionName} ready.`);
-
-    while (true) {
-      const msg = await consumer.receive();
-      const message = msg.getData().toString();
-      console.log(`Received message for ${subscriptionName}:`, message);
-      consumer.acknowledge(msg);
-      sendMessageToPulsarTopic();
-    }
-  } catch (err) {
-    console.error(`Error receiving message for ${subscriptionName}:`, err);
+  } catch (error) {
+    console.error(`Failed to create Pulsar consumer for ${subscriptionName}:`, error);
+    throw error;
   }
 }
 
-
-async function sendMessageToPulsarTopic() {
-  const pulsarClient = new Pulsar.Client({
-    serviceUrl: process.env.PULSAR_URL
-  });
+// Main consumer function
+async function createConsumer(subscriptionName) {
+  let consumer;
 
   try {
-    const producer = await pulsarClient.createProducer({
-      topic: process.env.SAMPLE_TOPIC+"test",
-      compressionType:'ZSTD'
+    consumer = await getConsumer(subscriptionName);
+    console.log(`Consumer with subscription ${subscriptionName} ready.`);
 
-    });
+    while (true) {
+      try {
+        const msg = await consumer.receive();
+        const messageData = msg.getData().toString();
+        console.log(`Received message on ${subscriptionName}: ${messageData}`);
 
-      const messageData = { falback: "falbackkkkkkkkkkkkkkkkkkkkkkkk"};
-      const message = Buffer.from(JSON.stringify(messageData));
-
-      await producer.send({
-        data: message,
-      });
     
-    
-  } catch (error) {
-    console.error('Failed to send message to Pulsar topic:', error);
+        consumer.acknowledge(msg);
+      } catch (receiveError) {
+        console.error(`Error receiving message for ${subscriptionName}:`, receiveError);
+      }
+    }
+  } catch (err) {
+    console.error(`Error setting up consumer for ${subscriptionName}:`, err);
   } finally {
-    await pulsarClient.close();
+    if (consumer) {
+      await consumer.close();
+    }
   }
 }
 
 module.exports = createConsumer;
+
+// Close Pulsar client and producers on process exit
+process.on('exit', async () => {
+  await closeProducers();
+  await closeClient();
+});
+
+process.on('SIGINT', async () => {
+  console.log('Process interrupted. Closing Pulsar client and producers...');
+  await closeProducers();
+  await closeClient();
+  process.exit();
+});

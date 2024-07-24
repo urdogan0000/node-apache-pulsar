@@ -4,16 +4,16 @@ const { getProducer, closeProducers, closeClient } = require('./producer');
 
 // Singleton Pulsar client instance
 const pulsarClient = new Pulsar.Client({
-  serviceUrl: process.env.PULSAR_URL
+  serviceUrl: process.env.PULSAR_SERVICE_URL
 });
 
 // Utility function to get a consumer
 async function getConsumer(subscriptionName) {
   try {
     return await pulsarClient.subscribe({
-      topic: process.env.SAMPLE_TOPIC,
+      topic: process.env.TOPIC_PREFIX,
       subscription: subscriptionName,
-      subscriptionType: process.env.CONSUMER_SC_TYPE,
+      subscriptionType: process.env.SUBSCRIPTION_TYPE,
       subscriptionInitialPosition: 'Latest'
     });
   } catch (error) {

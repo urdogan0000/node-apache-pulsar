@@ -3,12 +3,12 @@ require('dotenv').config();
 
 async function consumeMessagesFromPulsarTopic(subscriptionName) {
   const pulsarClient = new Pulsar.Client({
-    serviceUrl: process.env.PULSAR_URL
+    serviceUrl: process.env.PULSAR_SERVICE_URL
   });
 
   try {
     const consumer = await pulsarClient.subscribe({
-      topic: process.env.SAMPLE_TOPIC+"test",
+      topic: process.env.TOPIC_PREFIX+"test",
       subscription: subscriptionName, // Unique subscription name
       subscriptionType: 'Shared', // Using Shared subscription type
       subscriptionInitialPosition: 'Latest' // Start consuming from the latest message

@@ -7,7 +7,7 @@ async function startConsumers(numConsumers) {
   const consumerCount = parseInt(numConsumers, 10);
   
   if (isNaN(consumerCount) || consumerCount <= 0) {
-    console.error('Invalid CLIENT_SIZE. It must be a positive number.');
+    console.error('Invalid NUM_CONSUMERS. It must be a positive number.');
     return;
   }
 
@@ -24,7 +24,7 @@ async function startConsumers(numConsumers) {
   }
 }
 
-// Start consumers based on the CLIENT_SIZE environment variable
-startConsumers(process.env.CLIENT_SIZE).catch(error => {
+// Start consumers based on the NUM_CONSUMERS environment variable
+startConsumers(process.env.NUM_CONSUMERS).catch(error => {
   console.error('Unhandled error:', error);
 });

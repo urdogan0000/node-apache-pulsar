@@ -7,7 +7,7 @@ let producers = {}; // To track producers by topic
 async function getProducer(topic) {
   if (!pulsarClient) {
     pulsarClient = new Pulsar.Client({
-      serviceUrl: process.env.PULSAR_URL
+      serviceUrl: process.env.PULSAR_SERVICE_URL
     });
   }
 
@@ -55,9 +55,10 @@ async function sendMessageToPulsarTopic() {
   let producer;
   
   try {
-    producer = await getProducer(process.env.SAMPLE_TOPIC);
+    console.log(process.env.PULSAR_SERVICE_URL);
+    producer = await getProducer(process.env.TOPIC_PREFIX);
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 50000; i++) {
       const messageData = { test: "test", messageNumber: i };
       const message = Buffer.from(JSON.stringify(messageData));
       await producer.send({ data: message });

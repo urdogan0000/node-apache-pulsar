@@ -30,10 +30,10 @@ npm install
 Create a .env file in the project root and add the following environment variables:
 
 ```bash
-PULSAR_URL=pulsar://localhost:6650
-SAMPLE_TOPIC=persistent://public/default/my-topic
-CLIENT_SIZE=20
-CONSUMER_SC_TYPE= Shared    //Optins= Shared Exclusive KeyShared FailOver
+PULSAR_SERVICE_URL=pulsar://localhost:6650
+TOPIC_PREFIX=persistent://public/default/my-topic
+NUM_CONSUMERS=20
+SUBSCRIPTION_TYPE= Shared    //Optins= Shared Exclusive KeyShared FailOver
 ```
 
 ### 4. Start Pulsar using Docker Compose

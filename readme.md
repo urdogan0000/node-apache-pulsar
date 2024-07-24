@@ -49,13 +49,15 @@ sudo mkdir -p ./data/zookeeper ./data/bookkeeper
 sudo chown -R 10000 data
 ```
 
-This will start Zookeeper, Bookie, and Broker services for Apache Pulsar.
+
 
 Ensure Docker is running, then start the Pulsar services with Docker Compose:
 
 ```
 docker-compose up -d
 ```
+
+This will start Zookeeper, Bookie, and Broker services for Apache Pulsar.
 
 
 ### 5. Run the Producer

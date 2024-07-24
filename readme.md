@@ -30,19 +30,33 @@ npm install
 Create a .env file in the project root and add the following environment variables:
 
 ```bash
-PULSAR_SERVICE_URL=pulsar://localhost:6650
-TOPIC_PREFIX=persistent://public/default/my-topic
-NUM_CONSUMERS=20
-SUBSCRIPTION_TYPE= Shared    //Optins= Shared Exclusive KeyShared FailOver
+PULSAR_SERVICE_URL= pulsar://localhost:6650 
+SUBSCRIPTION_TYPE= Shared
+TOPIC_PREFIX= persistent://public/default/my-topic
+NUM_CONSUMERS= 200
+NUM_TOPICS=500
+NUM_MESSAGES=10
 ```
 
 ### 4. Start Pulsar using Docker Compose
 
+
+If you are using linux distrubitions,you should run
+
+```
+sudo mkdir -p ./data/zookeeper ./data/bookkeeper
+# this step might not be necessary on other than Linux platforms
+sudo chown -R 10000 data
+```
+
+This will start Zookeeper, Bookie, and Broker services for Apache Pulsar.
+
 Ensure Docker is running, then start the Pulsar services with Docker Compose:
+
 ```
 docker-compose up -d
 ```
-This will start Zookeeper, Bookie, and Broker services for Apache Pulsar.
+
 
 ### 5. Run the Producer
 

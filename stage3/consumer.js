@@ -1,19 +1,19 @@
 require('dotenv').config();
 const pulsar = require('pulsar-client');
 
-const { PULSAR_SERVICE_URL, TOPIC_NAME, SUBSCRIPTION_NAME } = process.env;
+const { PULSAR_SERVICE_URL, TOPIC_NAME, SUBSCRIPTION_NAME, SUBSCRIPTION_TYPE} = process.env;
 
 const serviceUrl = PULSAR_SERVICE_URL;
 const topicName = TOPIC_NAME;
-
-
+const subscriptionName = SUBSCRIPTION_NAME;
+const subscriptionType = SUBSCRIPTION_TYPE;
 (async () => {
   const client = new pulsar.Client({ serviceUrl });
 
   const consumer = await client.subscribe({
     topic: topicName,
-    subscription: "test",
-    subscriptionType: 'Exclusive'
+    subscription: subscriptionName,
+    subscriptionType: subscriptionType
   });
 
   console.log('Consumer is listening for messages...');

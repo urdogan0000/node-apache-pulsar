@@ -1,4 +1,5 @@
 require('dotenv').config();
+const createPulsarClient = require('./pulsarClient');
 
 const createProducers = async (client) => {
   const numTopics = parseInt(process.env.NUM_TOPICS, 10);
@@ -17,21 +18,44 @@ const createProducers = async (client) => {
 };
 
 const createProducer = async (client, topic, numMessages, producerId) => {
-  const producer = await client.createProducer({
-    topic: topic,
-  });
+  let producer;
+  try {
+    producer = await client.createProducer({
+      topic: topic,
+    });
 
-  const messagePromises = [];
+    const messagePromises = [];
+    for (let j = 1; j <= numMessages; j++) {
+      messagePromises.push(producer.send({
+        data: Buffer.from(`Message ${j} from producer ${producerId}`),
+      }));
+    }
 
-  for (let j = 1; j <= numMessages; j++) {
-    messagePromises.push(producer.send({
-      data: Buffer.from(`Message ${j} from producer ${producerId}`),
-    }));
+    await Promise.all(messagePromises);
+    console.log(`Producer for ${topic} sent ${numMessages} messages.`);
+  } catch (err) {
+    console.error(`Error creating producer for topic ${topic}:`, err);
+  } finally {
+    if (producer) {
+      await producer.close();
+    }
+  }
+};
+
+const main = async () => {
+  const client = createPulsarClient();
+
+  try {
+    await createProducers(client);
+  } catch (err) {
+    console.error('Error in Pulsar producer operations', err);
   }
 
-  await Promise.all(messagePromises);
-  await producer.close();
-  console.log(`Producer for ${topic} sent ${numMessages} messages.`);
+  client.close();
 };
+
+if (require.main === module) {
+  main();
+}
 
 module.exports = createProducers;
